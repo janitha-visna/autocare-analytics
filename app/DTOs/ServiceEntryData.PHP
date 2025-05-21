@@ -1,4 +1,5 @@
 <?php
+namespace App\DTOs;
 
 use Carbon\Carbon;
 
@@ -7,7 +8,6 @@ class ServiceEntryData
     public string $phone;
     public string $vehicleNumber;
     public string $vehicleType;
-    
     public Carbon $date;
     public Carbon $startTime;
     public Carbon $endTime;
