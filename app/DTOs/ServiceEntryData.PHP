@@ -1,4 +1,5 @@
 <?php
+
 namespace App\DTOs;
 
 use Carbon\Carbon;
@@ -13,6 +14,7 @@ class ServiceEntryData
     public Carbon $endTime;
     public float $amount;
     public string $categoryService;
+
 
     public function __construct(array $data)
     {

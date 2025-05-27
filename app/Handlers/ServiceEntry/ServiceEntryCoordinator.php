@@ -1,32 +1,38 @@
 <?php
 
-namespace App\ServiceEntry;
+namespace App\Handlers\ServiceEntry;
 
 use App\DTOs\ServiceEntryData;
+use App\Handlers\ServiceEntry\ServiceEntryAnalyticsHandler;
+use App\Helpers\ResponseFormatter;
 
 class ServiceEntryCoordinator
 {
-    // protected $phoneHandler;
-    // protected $vehicleHandler;
-    // protected $serviceHandler;
-
-    // public function __construct(
-    //     PhoneHandler $phoneHandler,
-    //     VehicleHandler $vehicleHandler,
-    //     ServiceHandler $serviceHandler,
-    // ) {
-    //     $this->phoneHandler = $phoneHandler;
-    //     $this->vehicleHandler = $vehicleHandler;
-    //     $this->serviceHandler = $serviceHandler;
-    // }
-
-    public function handle(ServiceEntryData $data)
-    // {
-    //     $this->phoneHandler->handle($data);
-    //     $vehicle = $this->vehicleHandler->handle($data);
-    //     $this->serviceHandler->handle($data, $vehicle);
-    // }
+    public function handle(ServiceEntryData $data): array
     {
-        echo 'Handle method called with vehicle number'; 
+        try {
+            // Initialize the analytics handler
+            $analyticsHandler = new ServiceEntryAnalyticsHandler();
+
+            // Call handle with only $data
+            $analyticsResult = $analyticsHandler->handle($data);
+
+            // Check for failure
+            if (!$analyticsResult['success']) {
+                throw new \Exception($analyticsResult['message']);
+            }
+
+            // You can include additional logic here if needed
+
+            return ResponseFormatter::success(
+                'Service entry processed successfully',
+                ['entry_id' => $analyticsResult['entry_id']]
+            );
+        } catch (\Exception $e) {
+            return ResponseFormatter::error(
+                'Processing failed: ' . $e->getMessage(),
+                'PROCESSING_ERROR'
+            );
+        }
     }
 }
